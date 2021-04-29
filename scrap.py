@@ -41,5 +41,33 @@ with app.test_request_context():
     print(url_for('profile', username='John Doe'))
     print(url_for('profile', username='John Doe'))
         
-    
+#%%
+from functools import wraps
+def my_decorator(f):
+    if f.__name__ == 'example':
+        print(1)
+        @wraps(f)
+        def wrapper(*args, **kwds):
+            print('Calling decorated function')
+            return f(*args, **kwds)
+        return wrapper
+    else:
+        print(2)
+        @wraps(f)
+        def wrapper(*args, **kwds):
+            print('Calling decorated function', f.__name__)
+            return f(*args, **kwds)
+        return wrapper
 
+@my_decorator
+def example():
+    """Docstring"""
+    print('Called example function')
+
+example()
+
+@my_decorator
+def example2():
+    """Docstring"""
+    print('Called example function2')
+example2()
